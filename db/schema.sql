@@ -26,5 +26,3 @@ CREATE TABLE employee(
     FOREIGN KEY (role_id) REFERENCES role(id) ON DELETE CASCADE,
     FOREIGN KEY (manager_id) REFERENCES employee(id) ON DELETE SET NULL
 );
-
-SELECT employees.id, employees.manager_id, managers.first_name, managers.last_name FROM employee AS employees INNER JOIN employee AS managers ON employee.manager_id = employee.id;
