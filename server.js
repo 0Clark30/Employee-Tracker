@@ -1,22 +1,44 @@
-const express = require("express");
-const fs = require('fs').promises
-const mysql = require("mysql2");
+const connection = require('./db/connection');
 const inquirer = require('inquirer');
-const PORT = process.env.PORT || 3001;
-const app = express();
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-const db = mysql.createConnection(
-  {
-    host: "localhost",
-    user: "root",
-    password: "0Clark30",
-    database: "movies_db",
-  },
-  console.log(`Connected to the movies_db database.`)
-);
+
+const start= () => {
+    inquirer.prompt({
+        name : "first",
+        type: "List",
+        message: "What would you like to do?",
+        choices: [
+            "View All Employees",
+            ""
+
+        ]
+    })
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
