@@ -75,7 +75,58 @@ const start = () => {
     });
 };
 
-const 
+const addEmployee = async () => {
+  await inquirer.prompt({
+    name : "first_name",
+    type : "input",
+    message : "What is their first name?"
+    
+  },
+  {
+    name : "last_name",
+    type : "input",
+    message : "What is their last name?"
+  },
+  {
+    name : "role_id",
+    type : "input",
+    message : "What is their role id?"
+  },
+  {
+    name : "manager_id",
+    type : "input",
+    message : "What is their managers id? (if none set null)"
+  }
+  )}; 
+
+
+const addDepartment = async () => {
+  await inquirer.prompt ({
+    name : "department_name",
+    type : "input",
+    message : "What is the departments name?"
+  })
+};
+
+const addRole = async () => {
+  await inquirer.prompt ({
+    name : "title",
+    type : "input",
+    message : "What is the role's title?"
+  },
+  {
+    name : "salary",
+    type : "input",
+    message : "What is the salary for this role?"
+  },
+  {
+    name : "department_id",
+    type : "input",
+    message : "What is the department id number?"
+  })
+}
+
+const
 
 
 
