@@ -2,11 +2,14 @@ const db = require("./db/connection");
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
 
+
+
+
 const start = () => {
   inquirer
     .prompt({
       name: "first",
-      type: "List",
+      type: "list",
       message: "What would you like to do?",
       choices: [
         "View All Employees",
@@ -22,54 +25,84 @@ const start = () => {
     .then((response) => {
       switch (response.first) {
         case "View All Employees":
-          db.query('SELECT * FROM employee INNER JOIN employee AS managers ON employee.manager_id = employee.id;'); // FIGURE OUT INNER JOIN OR JOIn
-
+          db.query("SELECT * FROM employee LEFT JOIN employee AS managers ON employee.manager_id = managers.id",[], function (err, results) {
+            console.table(results, "\n");
+            start()
+          }); // FIGURE OUT INNER JOIN OR JOIn
+          // first_name, last_name, employee_id, title, salary, department, manager_id
+          
           break;
 
         case "View All Roles":
           db.query("SELECT * FROM role;", function (err, results) {
-            console.log(results);
+            console.table(results, "\n");
+            start();
           });
-
+          
           break;
 
         case "View All Departments":
           db.query("SELECT * FROM department;", function (err, results) {
-            console.log(results);
+            console.table(results, "\n");
+            start();
           });
+          
           break;
 
         case "Add Employee":
           // NEED A FUNCTION THAT WILL RETURN MY ? MARKS?
+         let {first_name, last_name, role_id, manager_id} = addEmployee();
           db.query(
-            "INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?);",[], function (err, results) {
-            console.log(results);
+            "INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?);",[first_name, last_name, role_id, manager_id], function (err, results) {
+            console.table(results, "\n");
+            start();
           }
           );
+          
           break;
 
         case "Add Department":
           // NEED A FUNCTION THAT WILL RETURN MY ? MARKS?
+          const {department_name} = addDepartment();
            db.query(
-             "INSERT INTO department(department_name) VALUES (?);", [], function (err, results) {
-            console.log(results);
+             "INSERT INTO department(department_name) VALUES (?);", [department_name], function (err, results) {
+            console.table(results, "\n");
+             start();
           }
            );
+          
           break;
 
         case "Add Role":
           // NEED A FUNCTION THAT WILL RETURN MY ? MARKS?
-          db.query("INSERT INTO role(title, salary, department_id) VALUES (?, ?, ?); ", [], function (err, results) {
-            console.log(results);
+          const {title, salary, department_id} = addRole();
+          db.query("INSERT INTO role(title, salary, department_id) VALUES (?, ?, ?); ", [title, salary, department_id], function (err, results) {
+            console.table(results, "\n");
+            start();
           });
+          
           break;
 
         case "Update Employee Role":
           // NEED A FUNCTION THAT WILL RETURN MY ? MARKS? FOR AN UPDATE
+           let {newEmployee_id, newFirst_name, newLast_name, newRole_id, newManager_id} = updateWhat();
+
+          db.query(
+            "UPDATE employee SET first_name = ?, last_name = ?, role_id= ?, manager_id = ? Where employee_id = ?",
+            [newFirst_name, newLast_name, newRole_id, newManager_id, newEmployee_id],
+            function (err, results) {
+              console.table(results, '\n');
+              start();
+            }
+          );
+
+            
           break;
 
         case "Quit":
             // NEED A WAY TO QUIT
+
+
           break;
       }
     });
@@ -126,11 +159,34 @@ const addRole = async () => {
   })
 }
 
-const
+const updateWhat = async () => {
+ await inquirer.prompt(
+  {
+    name: "newEmployee_id",
+    type: "input",
+    message : "What is the Employee's ID for who you wish to Update?"
+  },
+  {
+    name : "newFirst_name",
+    type : "input",
+    message : "What is their first name?"
+    
+  },
+  {
+    name : "newLast_name",
+    type : "input",
+    message : "What is their last name?"
+  },
+  {
+    name : "newRole_id",
+    type : "input",
+    message : "What is their role id?"
+  },
+  {
+    name : "newManager_id",
+    type : "input",
+    message : "What is their managers id? (if none set null)"
+  })
+}
 
-
-
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+start();
