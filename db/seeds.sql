@@ -18,9 +18,9 @@ VALUES ("Software Engineer", 100000, 1),
     ("VP of Sales", 180000, 2),
     ("COO", 160000, 3);
 
- INSERT INTO employee(first_name, last_name, role_id, manager_id)
- VALUES 
-     ("Jimmy", "John", 9, NULL),        
+INSERT INTO employee(first_name, last_name, role_id, manager_id)
+VALUES 
+    ("Jimmy", "John", 9, NULL),        
     ("Little", "Wayne", 8, NULL),        
     ("John", "Denver", 10, NULL),          
     ("Hakuna", "Matata", 7, NULL),        
@@ -29,5 +29,5 @@ VALUES ("Software Engineer", 100000, 1),
     ("Hailey", "Comet", 2, 1),         
     ("Evan", "Essence", 3, 5),         
     ("Hale", "Storm", 4, 3),           
-    ("Donald", "Clinton", 5 , 4);   
+    ("Donald", "Clinton", 5 , 4); 
   
