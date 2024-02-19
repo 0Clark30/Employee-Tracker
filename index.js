@@ -51,7 +51,7 @@ const start = () => {
             ({ first_name, last_name, role_id, manager_id }) => {
               db.query(
                 "INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?);",
-                { first_name, last_name, role_id, manager_id },
+                [first_name, last_name, role_id, manager_id],
                 function (err, results) {
                   console.table(results);
                   start();
@@ -88,30 +88,16 @@ const start = () => {
           break;
 
         case "Update Employee Role":
-          updateWhat().then(
-            ({
-              newEmployee_id,
-              newFirst_name,
-              newLast_name,
-              newRole_id,
-              newManager_id,
-            }) => {
-              db.query(
-                "UPDATE employee SET first_name = ?, last_name = ?, role_id= ?, manager_id = ? Where employee_id = ?",
-                {
-                  newFirst_name,
-                  newLast_name,
-                  newRole_id,
-                  newManager_id,
-                  newEmployee_id,
-                },
-                function (err, results) {
-                  console.table(results);
-                  start();
-                }
-              );
-            }
-          );
+          updateWhat().then(({ newEmployee_id, newRole_id }) => {
+            db.query(
+              "UPDATE employee SET role_id= ? Where employee_id = ?",
+              [newRole_id, newEmployee_id],
+              function (err, results) {
+                console.table(results);
+                start();
+              }
+            );
+          });
           break;
 
         case "Quit":
@@ -187,24 +173,9 @@ const updateWhat = async () => {
       message: "What is the Employee's ID for who you wish to Update?",
     },
     {
-      name: "newFirst_name",
-      type: "input",
-      message: "What is their first name?",
-    },
-    {
-      name: "newLast_name",
-      type: "input",
-      message: "What is their last name?",
-    },
-    {
       name: "newRole_id",
       type: "input",
       message: "What is their role id?",
-    },
-    {
-      name: "newManager_id",
-      type: "input",
-      message: "What is their managers id? (if none set null)",
     },
   ]);
   return answers;
